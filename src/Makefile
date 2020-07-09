@@ -8,7 +8,8 @@ lzw-wasm.js: wrapper.c Makefile
 	${EMCC} *c \
 		 ffmpeg/*c ffmpeg/libavutil/log.c ffmpeg/libavutil/mem.c ffmpeg/libavutil/bprint.c \
 		-w \
-		-I . -I ffmpeg \
+		-I . \
+		-I ffmpeg \
 		-o lzw-wasm.js \
 		-s EXPORTED_FUNCTIONS=$(EXPORTED_FUNCTIONS) \
 		-s STRICT=1 \
@@ -26,3 +27,10 @@ lzw-wasm.js: wrapper.c Makefile
 	
 clean:
 	rm lzw-wasm.js
+
+build:
+	docker build . -t fast-lzw
+	$(eval export IMAGEID=$(shell docker create fast-lzw))
+	docker cp $(IMAGEID):/src/lzw-wasm.js lzw-wasm.js
+	docker rm $(IMAGEID)
+

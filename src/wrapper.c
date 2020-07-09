@@ -3,12 +3,12 @@
 #include <string.h>
 
 #include "lzw.h"
-unsigned char * lzwDecompress(const unsigned char *buffer, unsigned int length, unsigned int *write_length) {
+unsigned char * lzwDecompress(int codeSize, const unsigned char *buffer, unsigned int length, unsigned int *write_length) {
   int result;
 
   LZWState *state = 0;
   ff_lzw_decode_open(&state);
-  result = ff_lzw_decode_init(state, 8, buffer, length, FF_LZW_TIFF);
+  result = ff_lzw_decode_init(state, codeSize, buffer, length, FF_LZW_GIF);
   if (result) {
     return 0;
   }
